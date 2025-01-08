@@ -77,35 +77,37 @@ export const User = ({ id }: Props) => {
     };
 
     // Function to switch camera on the base of mode
-    // const cameraMode = (mode: string) => {
-    //   navigator.mediaDevices
-    //     .getUserMedia({ video: { facingMode: { exact: mode } } })
-    //     .then((stream) => {
-    //       if (userVideoRef.current) {
-    //         userVideoRef.current.srcObject = stream;
-    //       }
-    //     });
-    // };
-
-    stopCurrentStream();
-
-    // Set the camera mode
-    if (isFrontCamera) {
-      navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
-        if (userVideoRef.current) {
-          userVideoRef.current.srcObject = stream;
-        }
-      });
-      setFrontCamera(false);
-    } else {
+    const cameraMode = (mode: string) => {
       navigator.mediaDevices
-        .getUserMedia({ video: { facingMode: { exact: "user" } } })
+        .getUserMedia({ video: { facingMode: { exact: mode } } })
         .then((stream) => {
           if (userVideoRef.current) {
             userVideoRef.current.srcObject = stream;
           }
         });
+    };
+
+    stopCurrentStream();
+
+    // Set the camera mode
+    if (isFrontCamera) {
+      // navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
+      //   if (userVideoRef.current) {
+      //     userVideoRef.current.srcObject = stream;
+      //   }
+      // });
+      setFrontCamera(false);
+      cameraMode("environment");
+    } else {
+      // navigator.mediaDevices
+      //   .getUserMedia({ video: { facingMode: { exact: "user" } } })
+      //   .then((stream) => {
+      //     if (userVideoRef.current) {
+      //       userVideoRef.current.srcObject = stream;
+      //     }
+      //   });
       setFrontCamera(true);
+      cameraMode("user");
     }
   };
 
